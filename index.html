@@ -10,11 +10,11 @@
   <meta property="og:description" content="點連結跳轉付款 / 或掃描 QR Code。支援 LINE Pay 餘額與綁定信用卡。" />
   <meta property="og:type" content="website" />
   <style>
-    :root {
+    :root{
       --bg1:#0b0814; --bg2:#16102b;
       --card: rgba(255,255,255,.08); --card2: rgba(255,255,255,.06);
       --stroke: rgba(255,255,255,.12);
-      --text:#f7f4ff; --muted: rgba(247,244,255,.78); --soft: rgba(247,244,255,.62);
+      --text:#f7f4ff; --muted: rgba(247,244,255,.80); --soft: rgba(247,244,255,.64);
       --accent1:#ff7ac8; --accent2:#9b7bff;
       --shadow: 0 18px 60px rgba(0,0,0,.45);
       --r: 22px;
@@ -31,7 +31,7 @@
         linear-gradient(180deg, var(--bg1), var(--bg2));
       min-height:100vh;
     }
-    .wrap{max-width:560px;margin:0 auto;padding:18px 14px 40px}
+    .wrap{max-width:560px;margin:0 auto;padding:18px 14px 96px}
     .hero{
       border-radius:var(--r);
       background:linear-gradient(135deg, rgba(255,122,200,.10), rgba(155,123,255,.10));
@@ -48,37 +48,97 @@
     }
     header{padding:18px 18px 10px;position:relative}
     .brand{display:flex;gap:12px;align-items:center}
-    .mark{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg, rgba(255,122,200,.95), rgba(155,123,255,.95));display:grid;place-items:center;box-shadow:0 12px 34px rgba(255,122,200,.18);flex:0 0 auto}
+    .mark{
+      width:44px;height:44px;border-radius:14px;
+      background:linear-gradient(135deg, rgba(255,122,200,.95), rgba(155,123,255,.95));
+      display:grid;place-items:center;
+      box-shadow:0 12px 34px rgba(255,122,200,.18);
+      flex:0 0 auto
+    }
     .mark svg{width:26px;height:26px}
     h1{font-size:18px;margin:0;letter-spacing:.2px;line-height:1.2}
     .sub{margin-top:4px;font-size:13px;color:var(--muted);line-height:1.4}
+
     .card{padding:14px 18px 18px;border-top:1px solid rgba(255,255,255,.10);background:linear-gradient(180deg,var(--card),var(--card2));position:relative}
+
+    .btn-primary{
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      width:100%;
+      padding:16px 14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.18);
+      background:linear-gradient(135deg, rgba(255,122,200,.92), rgba(155,123,255,.92));
+      color:#120b22;
+      font-weight:900;
+      text-decoration:none;
+      font-size:16px;
+      letter-spacing:.3px;
+      box-shadow:
+        0 18px 50px rgba(155,123,255,.22),
+        0 18px 50px rgba(255,122,200,.16);
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btn-primary:active{transform:scale(.99)}
     .btn{
       display:flex;align-items:center;justify-content:center;gap:10px;
       width:100%;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.14);
-      background:linear-gradient(135deg, rgba(255,122,200,.22), rgba(155,123,255,.22));
-      color:var(--text);font-weight:800;text-decoration:none;font-size:15px;letter-spacing:.2px;
+      background:rgba(255,255,255,.07);
+      color:var(--text);font-weight:800;text-decoration:none;font-size:14.5px;letter-spacing:.2px;
       -webkit-tap-highlight-color:transparent;
     }
     .btn:active{transform:scale(.99)}
-    .btn.secondary{margin-top:10px;background:rgba(255,255,255,.07);font-weight:700}
     .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
     @media (max-width:390px){.row2{grid-template-columns:1fr}}
-    .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 0}
+
+    .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 0}
     .pill{font-size:12.5px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);padding:8px 10px;border-radius:999px;display:flex;gap:8px;align-items:center}
     .dot{width:8px;height:8px;border-radius:99px;background:linear-gradient(135deg,var(--accent1),var(--accent2));box-shadow:0 0 0 4px rgba(255,255,255,.05)}
+
     .small{margin-top:10px;color:var(--soft);font-size:12.5px;line-height:1.6}
     .qrbox{margin-top:12px;padding:12px;border-radius:18px;background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.12)}
     .qrbox img{width:100%;max-width:320px;margin:0 auto;display:block;aspect-ratio:1/1;border-radius:16px;background:#fff;padding:10px;box-shadow:0 18px 50px rgba(0,0,0,.35);object-fit:contain}
+
+    .img-fallback{
+      display:none;
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(0,0,0,.20);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--muted);
+      font-size:12.5px;
+      line-height:1.6;
+    }
+    .img-fallback a{color:rgba(255,255,255,.86);text-decoration:underline;text-underline-offset:3px}
+
     .steps{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:10px}
     .step{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09)}
     .num{width:28px;height:28px;border-radius:10px;background:linear-gradient(135deg, rgba(255,122,200,.95), rgba(155,123,255,.95));display:grid;place-items:center;font-weight:900;flex:0 0 auto}
     .step p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
+
     .hint{margin-top:12px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg, rgba(124,255,178,.10), rgba(255,255,255,.04));border:1px solid rgba(124,255,178,.22);color:var(--muted);font-size:13px;line-height:1.55}
+
     .footer{padding:14px 18px 18px;color:rgba(247,244,255,.52);font-size:12px;line-height:1.6}
-    .copytoast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(10,10,20,.88);border:1px solid rgba(255,255,255,.12);color:var(--text);padding:10px 12px;border-radius:999px;font-size:12.5px;opacity:0;pointer-events:none;transition:opacity .2s ease;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+
+    .copytoast{position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:rgba(10,10,20,.90);border:1px solid rgba(255,255,255,.12);color:var(--text);padding:10px 12px;border-radius:999px;font-size:12.5px;opacity:0;pointer-events:none;transition:opacity .2s ease;box-shadow:0 12px 40px rgba(0,0,0,.35)}
     .copytoast.show{opacity:1}
-    a.link{color:rgba(255,255,255,.85);text-decoration:underline;text-underline-offset:3px}
+
+    .sticky{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      padding:12px 12px calc(12px + env(safe-area-inset-bottom));
+      background:linear-gradient(180deg, rgba(11,8,20,0), rgba(11,8,20,.92) 28%, rgba(11,8,20,.96));
+      backdrop-filter: blur(8px);
+    }
+    .sticky-inner{
+      max-width:560px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:10px;
+    }
+    .sticky .btn-primary{padding:14px 12px;border-radius:16px;font-size:15.5px}
+    .sticky .btn{padding:14px 12px;border-radius:16px}
   </style>
 </head>
 <body>
@@ -99,11 +159,11 @@
       </header>
 
       <section class="card">
-        <a class="btn" href="https://qrcodepay.line.me/qr/payment/IZhFRLgCENvUlX0qfTNbn1Lr8mksH%252Fe%252Fr7KCo3hk0btVILyDAIQfy8zJeCVXoN2B" target="_blank" rel="noopener">立即前往 LINE Pay 付款</a>
+        <a class="btn-primary" href="https://qrcodepay.line.me/qr/payment/IZhFRLgCENvUlX0qfTNbn1Lr8mksH%252Fe%252Fr7KCo3hk0btVILyDAIQfy8zJeCVXoN2B" target="_blank" rel="noopener">⚡ 立即前往 LINE Pay 付款</a>
 
         <div class="row2">
-          <button class="btn secondary" id="copyBtn" type="button">複製付款連結</button>
-          <a class="btn secondary" href="#qr">直接掃碼付款</a>
+          <button class="btn" id="copyBtn" type="button">複製付款連結</button>
+          <a class="btn" href="#qr">直接掃碼付款</a>
         </div>
 
         <div class="pillrow" aria-label="付款方式">
@@ -115,13 +175,12 @@
         <p class="small">若你點連結後沒有自動跳到 LINE / LINE Pay，請改用下方「掃碼付款」方式（最穩）。</p>
 
         <div id="qr" class="qrbox">
-          <img src="https://drive.google.com/uc?export=view&id=1NFR-PgAt1ipwloHGKuCrBwks9BlEodZD" alt="Heartmoon LINE Pay 收款 QR Code" loading="lazy">
+          <img id="qrImg" src="https://drive.google.com/thumbnail?id=1NFR-PgAt1ipwloHGKuCrBwks9BlEodZD&sz=w1000" alt="Heartmoon LINE Pay 收款 QR Code" loading="lazy">
+          <div class="img-fallback" id="imgFallback">
+            QR 圖片目前無法直接顯示（常見原因：Google Drive 未公開或禁止外部引用）。<br>
+            你可以改用：<a href="https://drive.google.com/file/d/1NFR-PgAt1ipwloHGKuCrBwks9BlEodZD/view?usp=sharing" target="_blank" rel="noopener">點我開啟 QR 圖片</a>，或把 QR 圖檔命名為 <b>qr.png</b> 跟 index.html 放同一個資料夾（最穩）。
+          </div>
         </div>
-
-        <p class="small">
-          QR 若無法顯示，請確認 Google Drive 圖片已設為「知道連結的人都能查看」。也可點此開啟：
-          <a class="link" href="https://drive.google.com/file/d/1NFR-PgAt1ipwloHGKuCrBwks9BlEodZD/view?usp=sharing" target="_blank" rel="noopener">QR 圖片</a>
-        </p>
 
         <ul class="steps">
           <li class="step"><div class="num">1</div><p><b>手機看這頁也能付：</b>長按上方 QR 圖 → 選「加入照片 / 儲存圖片」。</p></li>
@@ -138,11 +197,26 @@
 
   <div class="copytoast" id="toast">已複製付款連結 ✅</div>
 
+  <div class="sticky">
+    <div class="sticky-inner">
+      <a class="btn-primary" href="https://qrcodepay.line.me/qr/payment/IZhFRLgCENvUlX0qfTNbn1Lr8mksH%252Fe%252Fr7KCo3hk0btVILyDAIQfy8zJeCVXoN2B" target="_blank" rel="noopener">⚡ 立即付款</a>
+      <a class="btn" href="#qr">掃碼</a>
+    </div>
+  </div>
+
   <script>
     (function() {
       const payUrl = "https://qrcodepay.line.me/qr/payment/IZhFRLgCENvUlX0qfTNbn1Lr8mksH%252Fe%252Fr7KCo3hk0btVILyDAIQfy8zJeCVXoN2B";
       const btn = document.getElementById('copyBtn');
       const toast = document.getElementById('toast');
+
+      const qrImg = document.getElementById('qrImg');
+      const fallback = document.getElementById('imgFallback');
+
+      qrImg.addEventListener('error', () => {
+        fallback.style.display = 'block';
+        qrImg.src = 'qr.png';
+      });
 
       function showToast(msg) {
         toast.textContent = msg;

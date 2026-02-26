@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>心月｜Heartmoon｜LINE Pay 付款</title>
+  <meta name="description" content="心月 Heartmoon｜LINE Pay 付款頁。可點連結跳轉付款，也可掃描 QR Code。支援 LINE Pay 餘額與綁定信用卡。" />
+  <meta name="theme-color" content="#120B22" />
+  <meta property="og:title" content="心月｜Heartmoon｜LINE Pay 付款" />
+  <meta property="og:description" content="點連結跳轉付款 / 或掃描 QR Code。支援 LINE Pay 餘額與綁定信用卡。" />
+  <meta property="og:type" content="website" />
+  <style>
+    :root {
+      --bg1:#0b0814; --bg2:#16102b;
+      --card: rgba(255,255,255,.08); --card2: rgba(255,255,255,.06);
+      --stroke: rgba(255,255,255,.12);
+      --text:#f7f4ff; --muted: rgba(247,244,255,.78); --soft: rgba(247,244,255,.62);
+      --accent1:#ff7ac8; --accent2:#9b7bff;
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --r: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 700px at 20% 10%, rgba(155,123,255,.28), transparent 60%),
+        radial-gradient(700px 600px at 90% 20%, rgba(255,122,200,.22), transparent 55%),
+        radial-gradient(900px 700px at 50% 120%, rgba(255,255,255,.06), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+    }
+    .wrap{max-width:560px;margin:0 auto;padding:18px 14px 40px}
+    .hero{
+      border-radius:var(--r);
+      background:linear-gradient(135deg, rgba(255,122,200,.10), rgba(155,123,255,.10));
+      border:1px solid var(--stroke);
+      box-shadow:var(--shadow);
+      overflow:hidden;position:relative;
+    }
+    .hero::before{
+      content:"";position:absolute;inset:-2px;
+      background:
+        radial-gradient(420px 180px at 10% 18%, rgba(255,122,200,.18), transparent 60%),
+        radial-gradient(380px 220px at 92% 8%, rgba(155,123,255,.20), transparent 60%);
+      pointer-events:none;
+    }
+    header{padding:18px 18px 10px;position:relative}
+    .brand{display:flex;gap:12px;align-items:center}
+    .mark{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg, rgba(255,122,200,.95), rgba(155,123,255,.95));display:grid;place-items:center;box-shadow:0 12px 34px rgba(255,122,200,.18);flex:0 0 auto}
+    .mark svg{width:26px;height:26px}
+    h1{font-size:18px;margin:0;letter-spacing:.2px;line-height:1.2}
+    .sub{margin-top:4px;font-size:13px;color:var(--muted);line-height:1.4}
+    .card{padding:14px 18px 18px;border-top:1px solid rgba(255,255,255,.10);background:linear-gradient(180deg,var(--card),var(--card2));position:relative}
+    .btn{
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      width:100%;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.14);
+      background:linear-gradient(135deg, rgba(255,122,200,.22), rgba(155,123,255,.22));
+      color:var(--text);font-weight:800;text-decoration:none;font-size:15px;letter-spacing:.2px;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btn:active{transform:scale(.99)}
+    .btn.secondary{margin-top:10px;background:rgba(255,255,255,.07);font-weight:700}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    @media (max-width:390px){.row2{grid-template-columns:1fr}}
+    .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 0}
+    .pill{font-size:12.5px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);padding:8px 10px;border-radius:999px;display:flex;gap:8px;align-items:center}
+    .dot{width:8px;height:8px;border-radius:99px;background:linear-gradient(135deg,var(--accent1),var(--accent2));box-shadow:0 0 0 4px rgba(255,255,255,.05)}
+    .small{margin-top:10px;color:var(--soft);font-size:12.5px;line-height:1.6}
+    .qrbox{margin-top:12px;padding:12px;border-radius:18px;background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.12)}
+    .qrbox img{width:100%;max-width:320px;margin:0 auto;display:block;aspect-ratio:1/1;border-radius:16px;background:#fff;padding:10px;box-shadow:0 18px 50px rgba(0,0,0,.35);object-fit:contain}
+    .steps{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+    .step{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09)}
+    .num{width:28px;height:28px;border-radius:10px;background:linear-gradient(135deg, rgba(255,122,200,.95), rgba(155,123,255,.95));display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+    .step p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
+    .hint{margin-top:12px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg, rgba(124,255,178,.10), rgba(255,255,255,.04));border:1px solid rgba(124,255,178,.22);color:var(--muted);font-size:13px;line-height:1.55}
+    .footer{padding:14px 18px 18px;color:rgba(247,244,255,.52);font-size:12px;line-height:1.6}
+    .copytoast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(10,10,20,.88);border:1px solid rgba(255,255,255,.12);color:var(--text);padding:10px 12px;border-radius:999px;font-size:12.5px;opacity:0;pointer-events:none;transition:opacity .2s ease;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+    .copytoast.show{opacity:1}
+    a.link{color:rgba(255,255,255,.85);text-decoration:underline;text-underline-offset:3px}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <header>
+        <div class="brand">
+          <div class="mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M15.5 2.5c-3.3 1.1-5.7 4.2-5.7 7.9 0 4.6 3.7 8.3 8.3 8.3 1.2 0 2.4-.3 3.4-.7-1.4 2.2-3.9 3.7-6.7 3.7-4.3 0-7.8-3.5-7.8-7.8 0-4.1 3.1-7.4 7.1-7.9z" fill="rgba(255,255,255,.92)"/>
+            </svg>
+          </div>
+          <div>
+            <h1>心月｜Heartmoon</h1>
+            <div class="sub">LINE Pay 付款（支援餘額／綁定信用卡）</div>
+          </div>
+        </div>
+      </header>
+
+      <section class="card">
+        <a class="btn" href="https://qrcodepay.line.me/qr/payment/IZhFRLgCENvUlX0qfTNbn1Lr8mksH%252Fe%252Fr7KCo3hk0btVILyDAIQfy8zJeCVXoN2B" target="_blank" rel="noopener">立即前往 LINE Pay 付款</a>
+
+        <div class="row2">
+          <button class="btn secondary" id="copyBtn" type="button">複製付款連結</button>
+          <a class="btn secondary" href="#qr">直接掃碼付款</a>
+        </div>
+
+        <div class="pillrow" aria-label="付款方式">
+          <div class="pill"><span class="dot"></span>LINE Pay 餘額</div>
+          <div class="pill"><span class="dot"></span>綁定信用卡</div>
+          <div class="pill"><span class="dot"></span>自行輸入金額</div>
+        </div>
+
+        <p class="small">若你點連結後沒有自動跳到 LINE / LINE Pay，請改用下方「掃碼付款」方式（最穩）。</p>
+
+        <div id="qr" class="qrbox">
+          <img src="https://drive.google.com/uc?export=view&id=1NFR-PgAt1ipwloHGKuCrBwks9BlEodZD" alt="Heartmoon LINE Pay 收款 QR Code" loading="lazy">
+        </div>
+
+        <p class="small">
+          QR 若無法顯示，請確認 Google Drive 圖片已設為「知道連結的人都能查看」。也可點此開啟：
+          <a class="link" href="https://drive.google.com/file/d/1NFR-PgAt1ipwloHGKuCrBwks9BlEodZD/view?usp=sharing" target="_blank" rel="noopener">QR 圖片</a>
+        </p>
+
+        <ul class="steps">
+          <li class="step"><div class="num">1</div><p><b>手機看這頁也能付：</b>長按上方 QR 圖 → 選「加入照片 / 儲存圖片」。</p></li>
+          <li class="step"><div class="num">2</div><p>打開 <b>LINE</b> → 掃描（或錢包/LINE Pay 的「掃碼」）→ 右上角選 <b>相簿</b> → 選剛存的 QR 圖。</p></li>
+          <li class="step"><div class="num">3</div><p>輸入金額 → 選擇「LINE Pay 餘額」或「綁定信用卡」→ 確認完成付款。</p></li>
+        </ul>
+
+        <div class="hint">✅ <b>更快的方法：</b>用另一支手機/平板開這頁，直接用手機相機掃描即可付款。</div>
+      </section>
+
+      <div class="footer">若付款遇到任何卡關，直接把畫面截圖傳給我們，我們會協助你完成。<br><span style="opacity:.85;">© 心月 Heartmoon</span></div>
+    </section>
+  </main>
+
+  <div class="copytoast" id="toast">已複製付款連結 ✅</div>
+
+  <script>
+    (function() {
+      const payUrl = "https://qrcodepay.line.me/qr/payment/IZhFRLgCENvUlX0qfTNbn1Lr8mksH%252Fe%252Fr7KCo3hk0btVILyDAIQfy8zJeCVXoN2B";
+      const btn = document.getElementById('copyBtn');
+      const toast = document.getElementById('toast');
+
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => toast.classList.remove('show'), 1600);
+      }
+
+      async function copyText(text) {
+        try {
+          await navigator.clipboard.writeText(text);
+          showToast('已複製付款連結 ✅');
+        } catch (e) {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            document.execCommand('copy');
+            showToast('已複製付款連結 ✅');
+          } catch (e2) {
+            showToast('複製失敗，請手動複製');
+            window.prompt('請長按複製付款連結：', text);
+          }
+          document.body.removeChild(ta);
+        }
+      }
+
+      btn.addEventListener('click', () => copyText(payUrl));
+    })();
+  </script>
+</body>
+</html>
